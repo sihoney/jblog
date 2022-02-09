@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="catebook">
+	<select id="getCate" parameterType="String" resultType="com.javaex.vo.CateVo">
+		<![CDATA[
+			select cate_no cateNo,
+			       id,
+			       cate_name cateName,
+			       description,
+			       reg_date regDate
+			from category
+			where id = #{userId}
+		]]>		
+	</select>
+	
+	<select id="getCateList" parameterType="String" resultType="com.javaex.vo.CateVo">
+		<![CDATA[
+			select ca.cate_no cateNo,
+			       cate_name cateName,
+			       description,
+			       postCnt
+			from category ca, (select cate_no, count(post_no) postCnt
+				                from post
+				                group by cate_no) ct
+			where ca.cate_no = ct.cate_no(+)
+			and ca.id = #{id}
+		]]>
+	</select>
+	
+	<insert id="addCate" parameterType="com.javaex.vo.CateVo">
+		<selectKey keyProperty="cateNo" resultType="int" order="BEFORE">
+			select seq_category_no.nextval from dual
+		</selectKey>
+		
+		<![CDATA[
+			insert into category
+			values(#{cateNo}, 
+			       #{id},
+			       #{cateName},
+			       #{description},
+			       sysdate)
+		]]>
+	</insert>
+	
+	<select id="getCateVo" parameterType="int" resultType="com.javaex.vo.CateVo">
+		<![CDATA[
+			select cate.cate_no as cateNo,
+			       cate_name as cateName,
+			       postCnt,
+			       description
+			from category cate, (select cate_no, count(post_no) postCnt
+			                from post 
+			                group by cate_no) cnt
+			where cate.cate_no = cnt.cate_no(+)
+			and cate.cate_no = #{cateNo}
+		]]>
+	</select>
+	
+	<delete id="deleteCate" parameterType="int">
+		<![CDATA[
+			delete from category
+			where cate_no = #{cateNo}
+		]]>
+	</delete>
+</mapper>

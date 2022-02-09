@@ -15,4 +15,14 @@ public class UserDao {
 	public UsersVo idCheck(String id) {
 		return sqlSession.selectOne("usersbook.idCheck", id);
 	}
+	
+	public void addUser(UsersVo uvo) {
+		int count = sqlSession.insert("usersbook.addUser", uvo);
+		System.out.println(count + "건 - 계정이 생성되었습니다.");
+	}
+	
+	public UsersVo checkUser(UsersVo uvo) {
+		System.out.println("uvo: " + uvo);
+		return sqlSession.selectOne("usersbook.checkUser", uvo);
+	}
 }

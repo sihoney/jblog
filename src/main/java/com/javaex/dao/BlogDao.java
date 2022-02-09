@@ -1,0 +1,31 @@
+package com.javaex.dao;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.javaex.vo.BlogVo;
+
+@Repository
+public class BlogDao {
+
+	@Autowired
+	SqlSession sqlSession;
+	
+	public int addBlog(String id) {
+		System.out.println("BlogDao.addBlog()" + id);
+		
+		int count = sqlSession.insert("blogbook.addBlog", id);
+		System.out.println(count + "건 블로그가 생성되었습니다.");
+		return count;
+	}
+	
+	public BlogVo getBlog(String userId) {
+		System.out.println("userId: " + userId);
+		return sqlSession.selectOne("blogbook.getBlog", userId);
+	}
+	
+	public void modifyBlog(BlogVo bvo) {
+		sqlSession.update("blogbook.modifyBlog", bvo);
+	}
+}

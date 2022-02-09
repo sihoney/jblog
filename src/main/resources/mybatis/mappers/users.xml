@@ -9,4 +9,28 @@
 			where id = #{id}
 		]]>
 	</select>
+	
+	<insert id="addUser" parameterType="com.javaex.vo.UsersVo">
+		<![CDATA[
+			insert into users(user_no, id, user_name, password, join_date)
+			values(seq_users_no.nextval, #{id}, #{userName}, #{password}, sysdate)
+		]]>
+	</insert>
+	
+	<select id="checkUser" parameterType="com.javaex.vo.UsersVo" resultType="com.javaex.vo.UsersVo">
+		<![CDATA[
+			SELECT USER_NAME userName, 
+			       USER_NO userNo,
+			       id
+			FROM USERS
+			WHERE ID = #{id}
+			AND PASSWORD = #{password}
+		]]>
+	</select>
+	
+	<update id="modifyBlog" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			
+		]]>
+	</update>
 </mapper>

@@ -27,20 +27,17 @@
 					<!-- 사용자업로드 이미지 -->
 					<%-- <img id="proImg" src=""> --%>
 					
-					<div id="nick">정우성(hijava)님</div>
+					<div id="nick">${map.blogVo.userName}(${map.blogVo.id })님</div>
 				</div>
 				<div id="cate">
 					<div class="text-left">
 						<strong>카테고리</strong>
 					</div>
 					<ul id="cateList" class="text-left">
-						<li><a href="$}">카테고리5</a></li>
-						<li><a href="$}">카테고리4</a></li>
-						<li><a href="$}">카테고리3</a></li>
-						<li><a href="$}">카테고리2</a></li>
-						<li><a href="$}">카테고리1</a></li>
+						<c:forEach items="${map.cateList }" var="cateVo">
+							<li><a href="$}">${cateVo.cateName }</a></li>
+						</c:forEach>
 						<li><a href="$}">미분류</a></li>
-						
 					</ul>
 				</div>
 			</div>
@@ -51,7 +48,7 @@
 				<div id="postBox" class="clearfix">
 						<div id="postTitle" class="text-left"><strong>08.페이징</strong></div>
 						<div id="postDate" class="text-left"><strong>2020/07/23</strong></div>
-						<div id="postNick">정우성(hijava)님</div>
+						<div id="postNick">()님</div>
 				</div>
 				<!-- //postBox -->
 			

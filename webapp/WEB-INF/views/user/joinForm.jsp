@@ -16,7 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/main-header.jsp"></c:import>
 
 		<div>		
-			<form id="joinForm" method="post" action="${pageContext.request.contextPath}/user/join">
+			<form id="joinForm">
 				<table>
 			      	<colgroup>
 						<col style="width: 100px;">
@@ -27,7 +27,7 @@
 		      			<td><label for="txtId">아이디</label></td>
 		      			<td><input id="txtId" type="text" name="id" required></td>
 		      			<td><button id="btnIdCheck" type="button">아이디체크</button></td>
-		      			<td><input type="hidden" name="check" value=""></td>
+		      			<td><input id="check" type="hidden" name="check" value=""></td>
 		      		</tr>
 		      		<tr>
 		      			<td></td>
@@ -66,6 +66,8 @@
 
 </body>
 <script>
+	let checkResult = $("#check");
+	
 	$("#btnIdCheck").on("click", function(){
 		let id = $("#txtId").val();
 		
@@ -78,16 +80,56 @@
 			success: function(result){
 				if(result == 1) {
 					$("#tdMsg").text("다른 아이디로 가입해 주세요.");
+					checkResult.val(false);
 				} else {
 					$("#tdMsg").text("사용할 수 있는 아이디 입니다.");
+					checkResult.val(true);
 				}
 				
 			},
 			error: function(XHR, status, error){
 				console.log(status + " : " + error);
 			}
-			
 		})
+	})
+	
+	$("#joinForm").on("submit", function(e){
+		e.preventDefault();
+		let arr = $("#joinForm").serializeArray();
+		
+		let obj = {
+				id: arr[0].value,
+				password: arr[2].value,
+				userName: arr[3].value
+		}
+
+		if(checkResult.val() == "true") {
+			
+			$.ajax({
+				url: "${pageContext.request.contextPath}/user/join",
+				type: "post",
+				contentType: "application/json",
+				data: JSON.stringify(obj),
+				
+				dataType: "json",
+				success: function(result){
+					console.log(result)
+					
+					if(result == "success") {
+						location.href = "${pageContext.request.contextPath}/user/joinSuccess";
+					}
+					
+				},
+				error: function(XHR, status, error){
+					console.log(status + " : " + error);
+				}
+			})	
+					
+		} else {
+			$("#tdMsg").text("아이디 중복 체크 해주세요.");
+			checkResult.val(false);
+		}
+		
 	})
 	
 </script>

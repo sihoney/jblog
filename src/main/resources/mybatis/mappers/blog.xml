@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="blogbook">
+	<insert id="addBlog" parameterType="String">
+		<selectKey keyProperty="userName" resultType="String" order="BEFORE">
+			<![CDATA[
+				select user_name
+				from users
+				where id = #{id}
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into blog(id, blog_title)
+			values(#{id}, #{userName} || '의 블로그입니다.')
+		]]>
+	</insert>
+	
+	<select id="getBlog" parameterType="String" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select blog.id, 
+				   blog_title blogTitle, 
+				   logo_file logoFile,
+				   user_name userName
+			from blog, users
+			where blog.id = users.id
+			and blog.id = #{id}
+		]]>
+	</select>
+</mapper>
