@@ -1,5 +1,9 @@
 package com.javaex.service;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,17 +46,32 @@ public class BlogService {
 		MultipartFile file = bvo.getLogoFile();
 		
 		String saveDir = "C:\\javaStudy\\file\\upload";
-		
 		String orgName = file.getOriginalFilename();
-		
 		String exName = orgName.substring(orgName.lastIndexOf("."));
-		
 		String saveName = System.currentTimeMillis() + UUID.randomUUID().toString() + exName;
-		
 		String filePath = saveDir + "\\" + saveName;
 		
-		System.out.println(filePath);
+		System.out.println("filePath: " + filePath);
 		
-		//blogDao.modifyBlog(bvo);
+		bvo.setSaveName(saveName);
+		
+		/* db에 저장 */
+		blogDao.modifyBlog(bvo);
+		
+		/* 파일 저장 */
+		/*
+		try {
+			byte[] fileDate = file.getBytes();
+			
+			OutputStream out = new FileOutputStream(filePath);
+			BufferedOutputStream bout = new BufferedOutputStream(out);
+			
+			bout.write(fileDate);
+			bout.close();
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		*/
 	}
 }

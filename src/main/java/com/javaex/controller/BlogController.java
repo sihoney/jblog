@@ -49,14 +49,13 @@ public class BlogController {
 		return "blog/admin/blog-admin-write";
 	}
 	
-	@RequestMapping(value="/admin/modify") 
-	public String modify(@ModelAttribute BlogVo bvo) {
+	@RequestMapping(value="/{userId}/admin/basic/modify") 
+	public String modify(@ModelAttribute BlogVo bvo, @PathVariable(value="userId") String id) {
 		System.out.println("BlogController.modify()");
-		
-		//************* 다시 시도해보기 ... 지금은 모르겠다 *******/
-		
+
+		bvo.setId(id);
 		blogService.modifyBlog(bvo);
 		
-		return "";
+		return "redirect:/"+id;
 	}
 }

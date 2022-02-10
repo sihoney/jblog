@@ -27,4 +27,13 @@
 			and blog.id = #{id}
 		]]>
 	</select>
+	
+	<update id="modifyBlog" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			update blog
+			set blog_title = #{blogTitle},
+			    logo_file = #{logoFile}
+			where id = #{id}
+		]]>
+	</update>
 </mapper>

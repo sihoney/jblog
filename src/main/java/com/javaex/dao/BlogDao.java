@@ -26,6 +26,7 @@ public class BlogDao {
 	}
 	
 	public void modifyBlog(BlogVo bvo) {
-		sqlSession.update("blogbook.modifyBlog", bvo);
+		int count = sqlSession.update("blogbook.modifyBlog", bvo);
+		System.out.println(count + "건 blog가 수정되었습니다.");
 	}
 }

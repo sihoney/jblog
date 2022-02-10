@@ -123,11 +123,12 @@
 				
 				render(result)
 				
-				newName.attr("value", "");
-				newDesc.attr("value", "");
+				newName.val("");
+				newDesc.val("");
+				
 			},
-			error: function(XHR, status, error) {
-				console.log(status + " : " + error);
+			error:function(request,status,error){
+			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 	})
@@ -141,14 +142,19 @@
 			url: "${pageContext.request.contextPath}/cate/deleteCate",
 			type: "post",
 			data: {cateNo: cateNo},
+			
 			dataType: "json",
-			success: function(){
+			success: function(result) {
 				
-				$("#tr-" + cateNo).remove();
+				console.log(result)
+				
+				if(result == "success") {
+					$("#tr-" + cateNo).remove();	
+				}
 			
 			},
-			error: function(XHR, status, error) {
-				console.log(status + " : " + error);
+			error:function(request,status,error){
+			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 	})

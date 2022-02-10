@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaex.dao.CategoryDao;
+import com.javaex.dao.PostDao;
 import com.javaex.vo.CateVo;
 
 @Service
@@ -13,6 +14,8 @@ public class CategoryService {
 
 	@Autowired
 	CategoryDao cateDao;
+	@Autowired
+	PostDao postDao;
 	
 	public CateVo addCate(CateVo cvo) {
 		cateDao.addCate(cvo);
@@ -26,7 +29,8 @@ public class CategoryService {
 		return cateDao.getCateList(id);
 	}
 	
-	public void deleteCate(int cateNo) {
-		cateDao.deleteCate(cateNo);
+	public int deleteCate(int cateNo) {
+		postDao.deletePost(cateNo);
+		return cateDao.deleteCate(cateNo);
 	}
 }

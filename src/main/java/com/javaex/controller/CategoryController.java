@@ -45,9 +45,15 @@ public class CategoryController {
 	
 	@ResponseBody
 	@RequestMapping("/deleteCate")
-	public void deleteCate(@RequestParam(value="cateNo") int cateNo) {
+	public String deleteCate(@RequestParam(value="cateNo") int cateNo) {
 		System.out.println("CategoryController.deleteCate()");
 		
-		cateService.deleteCate(cateNo);
+		int result = cateService.deleteCate(cateNo);
+		
+		if(result == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
 	}
 }

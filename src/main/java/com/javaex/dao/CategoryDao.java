@@ -32,10 +32,18 @@ public class CategoryDao {
 		return sqlSession.selectOne("catebook.getCateVo", cateNo);
 	}
 	
-	public void deleteCate(int cateNo) {
+	public int deleteCate(int cateNo) {
 		System.out.println("CategoryDao.deleteCate()");
 		
 		int count = sqlSession.delete("catebook.deleteCate", cateNo);
 		System.out.println(count + "건이 삭제되었습니다");
+		return count;
+	}
+	
+	public void defaultSetting(String id) {
+		System.out.println("CateDao.defaultSetting()" + id);
+		
+		int count = sqlSession.insert("catebook.defaultSetting", id);
+		System.out.println(count + "건 미분류 카테고리가 추가되었습니다.");
 	}
 }

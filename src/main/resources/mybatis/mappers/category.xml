@@ -63,4 +63,15 @@
 			where cate_no = #{cateNo}
 		]]>
 	</delete>
+	
+	<select id="defaultSetting" parameterType="String">
+		<![CDATA[
+			insert into category(cate_no, id, cate_name, reg_date, description)
+			values(seq_category_no.nextval
+				   , #{id}
+				   , '미분류'
+				   , sysdate
+				   , '기본으로 만들어지는 카테고리입니다')
+		]]>
+	</select>
 </mapper>

@@ -25,7 +25,7 @@
 			<!-- //admin-menu -->
 			
 			<div id="admin-content">
-				<form action="${pageContext.request.contextPath}/admin/modify" method="post">
+				<form action="${pageContext.request.contextPath}/${sessionScope.authUser.id}/admin/basic/modify" method="post" enctype="multipart/form-data">
 	 		      	<table id="admin-basic">
 	 		      		<colgroup>
 							<col style="width: 100px;">
