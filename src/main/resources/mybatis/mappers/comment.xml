@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="commentbook">
+	<insert id="addCmt" parameterType="com.javaex.vo.CommentVo">
+		<selectKey keyProperty="cmtNo" resultType="int" order="BEFORE">
+			select seq_comments_no.nextval 
+			from dual
+		</selectKey>
+		
+		<![CDATA[
+			insert into comments(cmt_no, post_no, user_no, cmtcontent, reg_date)
+			values(#{cmtNo}, 
+			       #{postNo},
+			       #{userNo},
+			       #{cmtContent},
+			       sysdate)
+		]]>
+	</insert>
+	
+	<select id="getCmtVo" parameterType="int" resultType="com.javaex.vo.CommentVo">
+		<![CDATA[
+			SELECT cmtcontent cmtContent,
+			       to_char(REG_DATE, 'YYYY/MM/DD') regDate,
+			       cmt_no cmtNo,
+			       cmt.user_no userNo,
+			       user_name userName
+			FROM COMMENTS cmt, users us
+			WHERE cmt.user_no = us.user_no
+			and CMT_NO = #{cmtNo}
+		]]>
+	</select>
+	
+	<select id="getList" parameterType="int" resultType="com.javaex.vo.CommentVo" >
+		<![CDATA[
+			select cmt_no as cmtNo,
+			       post_no as postNo,
+			       comments.user_no as userNo,
+			       cmtcontent as cmtContent,
+			       to_char(comments.reg_date, 'YYYY/MM/DD') as regDate,
+			       users.user_name as userName
+			from comments, users
+			where comments.user_no = users.user_no
+			and post_no = #{postNo}
+		]]>
+	</select>
+</mapper>

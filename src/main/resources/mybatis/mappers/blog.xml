@@ -36,4 +36,20 @@
 			where id = #{id}
 		]]>
 	</update>
+	
+	<select id="getBlogTitle" parameterType="String" resultType="String">
+		<![CDATA[
+			select blog_title
+			from blog
+			where id = #{id}
+		]]>
+	</select>
+	
+	<select id="getLogoFile" parameterType="String" resultType="String">
+		<![CDATA[
+			select logo_file logoFile
+			from blog
+			where id = #{id}
+		]]>
+	</select>
 </mapper>

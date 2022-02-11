@@ -19,10 +19,10 @@ public class UsersVo {
 		this.joinDate = joinDate;
 	}
 	
-	public int getNumberNo() {
+	public int getUserNo() {
 		return userNo;
 	}
-	public void setNumberNo(int numberNo) {
+	public void setUserNo(int numberNo) {
 		this.userNo = numberNo;
 	}
 	public String getId() {

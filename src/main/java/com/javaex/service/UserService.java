@@ -1,5 +1,8 @@
 package com.javaex.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +42,15 @@ public class UserService {
 	}
 	
 	/* 로그인 */
-	public UsersVo login(UsersVo uvo) {
-		return userDao.checkUser(uvo);
+	public Map<String, Object> login(UsersVo uvo) {
+		String blogTitle = blogDao.getBlogTitle(uvo.getId()); 
+		UsersVo authUser =  userDao.checkUser(uvo);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("blogTitle", blogTitle);
+		map.put("authUser", authUser);
+		
+		return map;
 	}
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="postbook">
+	<delete id="deletePost" parameterType="int">
+		<![CDATA[
+			delete from post
+			where cate_no = #{cateNo}
+		]]>
+	</delete>
+	
+	<insert id="addPost" parameterType="com.javaex.vo.PostVo">
+		<![CDATA[
+			insert into post(post_no, cate_no, post_title, post_content, reg_date)
+			values(seq_post_no.nextval,
+			       #{cateNo},
+			       #{postTitle},
+			       #{postContent},
+			       sysdate)
+		]]>
+	</insert>
+	
+	<select id="getPostList" parameterType="String" resultType="com.javaex.vo.PostVo">
+		<![CDATA[
+			select post_no as postNo,
+			       cate_no as cateNo,
+			       post_title as postTitle,
+			       post_content as postContent,
+			       reg_date as regDate
+			from post
+			where cate_no in (select cate_no
+			                  from category
+			                  where id = #{userId})
+			order by reg_date desc
+		]]>
+	</select>
+	
+	<select id="getRecentPost" parameterType="String" resultType="com.javaex.vo.PostVo">
+		<![CDATA[
+			select post_no postNo,
+			       cate_no cateNo,
+			       post_title postTitle,
+			       post_content postContent,
+			       to_char(reg_date, 'YYYY/MM/DD') regDate
+			from post
+			where cate_no in (select cate_no
+			                  from category
+			                  where id = #{userId})
+			and reg_date = (select max(po.reg_date)
+			                from post po, category ca
+			                where po.cate_no = ca.cate_no
+			                and ca.id = #{userId})
+		]]>
+	</select>
+	
+	<select id="getListByCate" parameterType="int" resultType="com.javaex.vo.PostVo">
+		<![CDATA[
+			select post_no postNo,
+			       post_title postTitle,
+			       reg_date regDate
+			from post
+			where cate_no = #{cateNo}
+		]]>
+	</select>
+	
+	<select id="getPostVo" parameterType="int" resultType="com.javaex.vo.PostVo">
+		<![CDATA[
+			select post_title postTitle,
+			       post_content postContent,
+			       to_char(reg_date, 'YYYY/MM/DD') regDate
+			from post
+			where post_no = #{postNo}
+		]]>
+	</select>
+</mapper>

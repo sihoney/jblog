@@ -1,5 +1,7 @@
 package com.javaex.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,13 @@ public class UserController {
 	public String login(@ModelAttribute UsersVo uvo, HttpSession session) {
 		System.out.println("UserController.login()");
 		
-		UsersVo authUser = userService.login(uvo);
+		Map<String, Object> map = userService.login(uvo);
 		
-		if(authUser == null) {
+		if(map == null) {
 			return "fail";
 		} else {
-			session.setAttribute("authUser", authUser);
+			session.setAttribute("authUser", map.get("authUser"));
+			session.setAttribute("blogTitle", map.get("blogTitle")); 
 			return "success";
 		}
 	}
@@ -48,6 +51,7 @@ public class UserController {
 		System.out.println("UserController.logout()");
 			
 		session.removeAttribute("authUser");
+		session.removeAttribute("blogTitle");
 		
 		return "redirect:/";
 	}

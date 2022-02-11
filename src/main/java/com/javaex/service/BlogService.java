@@ -18,6 +18,7 @@ import com.javaex.dao.CategoryDao;
 import com.javaex.dao.PostDao;
 import com.javaex.vo.BlogVo;
 import com.javaex.vo.CateVo;
+import com.javaex.vo.PostVo;
 
 @Service
 public class BlogService {
@@ -29,49 +30,76 @@ public class BlogService {
 	@Autowired
 	PostDao postDao;
 	
+	/* 블로그 첫 화면 정보들 */
 	public Map<String, Object> getBlogInfo(String userId) {
-		List<CateVo> cateList = cateDao.getCate(userId);
+		List<CateVo> cateList = cateDao.getCate(userId);		/* 카테고리 항목 */
 		BlogVo blogVo =  blogDao.getBlog(userId);
+		List<PostVo> postList = postDao.getPostList(userId);	/* 포스트 항목 */
+		PostVo postVo = postDao.getRecentPost(userId);			/* 가장 최신 포스트 */
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cateList", cateList);
 		map.put("blogVo", blogVo);
+		map.put("postList", postList);
+		map.put("postVo", postVo);
 		
 		return map;
 	}
 	
-	public void modifyBlog(BlogVo bvo) {
+	/* 블로그 사진, 제목 수정하기 */
+	public void modifyBlog(Map<String, Object> map) {
 		System.out.println("BlogService.modifyBlog()");
 		
-		MultipartFile file = bvo.getLogoFile();
-		
+		MultipartFile file = (MultipartFile) map.get("file");
+		BlogVo bvo = (BlogVo) map.get("bvo");
+
+		String saveName;
 		String saveDir = "C:\\javaStudy\\file\\upload";
+		String filePath;
 		String orgName = file.getOriginalFilename();
-		String exName = orgName.substring(orgName.lastIndexOf("."));
-		String saveName = System.currentTimeMillis() + UUID.randomUUID().toString() + exName;
-		String filePath = saveDir + "\\" + saveName;
 		
-		System.out.println("filePath: " + filePath);
+		if(orgName == "") { // 기존 파일 정보를 가져오기
+			saveName = blogDao.getLogoFile(bvo.getId());
+			filePath = saveDir + "\\" + saveName;
+
+		} else {			
+			String exName = orgName.substring(orgName.lastIndexOf("."));
+			saveName = System.currentTimeMillis() + UUID.randomUUID().toString() + exName;
+			filePath = saveDir + "\\" + saveName;
+		}
 		
-		bvo.setSaveName(saveName);
+		bvo.setLogoFile(saveName);
 		
 		/* db에 저장 */
 		blogDao.modifyBlog(bvo);
 		
 		/* 파일 저장 */
-		/*
 		try {
-			byte[] fileDate = file.getBytes();
+			byte[] fileData = file.getBytes();
 			
 			OutputStream out = new FileOutputStream(filePath);
 			BufferedOutputStream bout = new BufferedOutputStream(out);
 			
-			bout.write(fileDate);
+			bout.write(fileData);
 			bout.close();
 			
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		*/
+	}
+	
+	/* 글쓰기 화면에서 카테고리 목록 가져오기 */
+	public List<CateVo> writeForm(String userId){
+		return cateDao.getCate(userId);
+	}
+	
+	/* 글 저장 */
+	public void addPost(PostVo pvo) {
+		postDao.addPost(pvo);
+	}
+	
+	/* 블로그 수정 화면에 기존 정보 불러오기 */
+	public BlogVo getBlogVo(String userId) {
+		return blogDao.getBlog(userId);
 	}
 }

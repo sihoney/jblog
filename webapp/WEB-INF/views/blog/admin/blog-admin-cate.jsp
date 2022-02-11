@@ -138,25 +138,29 @@
 		let $this = $(this);
 		let cateNo = $this.attr("data-cateNo");
 		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/cate/deleteCate",
-			type: "post",
-			data: {cateNo: cateNo},
+		if(confirm("카테고리를 삭제하면 관련 포스트도 삭제됩니다. 삭제하시겠습니까?") == true) {
+			console.log("삭제")
 			
-			dataType: "json",
-			success: function(result) {
+			$.ajax({
+				url: "${pageContext.request.contextPath}/cate/deleteCate",
+				type: "post",
+				data: {cateNo: cateNo},
 				
-				console.log(result)
+				dataType: "json",
+				success: function(result) {
+					
+					console.log(result)
+					
+					if(result == "success") {
+						$("#tr-" + cateNo).remove();	
+					}
 				
-				if(result == "success") {
-					$("#tr-" + cateNo).remove();	
+				},
+				error:function(request,status,error){
+				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
-			
-			},
-			error:function(request,status,error){
-			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		})
+			})
+		} 
 	})
 	
 	function fetchList(){

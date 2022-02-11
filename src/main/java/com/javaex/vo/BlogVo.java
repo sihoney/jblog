@@ -1,21 +1,18 @@
 package com.javaex.vo;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class BlogVo {
 
 	private String id;
 	private String blogTitle;
-	private MultipartFile logoFile;
+	private String logoFile;
 	
 	private String saveName;
 	private String filePath;
-	
 	private String userName;
 	
 	public BlogVo() {}
 
-	public BlogVo(String id, String blogTitle, MultipartFile logoFile, String saveName, String filePath,
+	public BlogVo(String id, String blogTitle, String logoFile, String saveName, String filePath,
 			String userName) {
 		super();
 		this.id = id;
@@ -42,11 +39,11 @@ public class BlogVo {
 		this.blogTitle = blogTitle;
 	}
 
-	public MultipartFile getLogoFile() {
+	public String getLogoFile() {
 		return logoFile;
 	}
 
-	public void setLogoFile(MultipartFile logoFile) {
+	public void setLogoFile(String logoFile) {
 		this.logoFile = logoFile;
 	}
 
@@ -76,10 +73,9 @@ public class BlogVo {
 
 	@Override
 	public String toString() {
-		return "BlogVo [id=" + id + ", blogTitle=" + blogTitle + ", logoFile=" + logoFile + ", saveName=" + saveName
-				+ ", filePath=" + filePath + ", userName=" + userName + "]";
+		return "BlogVo [id=" + id + ", blogTitle=" + blogTitle +", logoFile=" + logoFile
+				+ ", saveName=" + saveName + ", filePath=" + filePath + ", userName=" + userName + "]";
 	}
-	
-	
 
+	
 }

@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>JBlog</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 </head>
 
 <body>
@@ -33,15 +33,25 @@
 						</colgroup>
 			      		<tr>
 			      			<td><label for="textTitle">블로그 제목</label></td>
-			      			<td><input id="textTitle" type="text" name="blogTitle" value=""></td>
+			      			<td><input id="textTitle" type="text" name="blogTitle" value="${blogVo.blogTitle }"></td>
 			      		</tr>
 			      		<tr>
 			      			<td><label>로고이미지</label></td>
-			      			<td class="text-left"><img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg"></td>   
+			      			<td class="text-left">
+			      				<c:choose>
+			      					<c:when test="${empty blogVo.logoFile }">
+			      						<img src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg">
+			      					</c:when>
+			      					<c:otherwise>
+			      						<img src="${pageContext.request.contextPath}/upload/${blogVo.logoFile}">
+			      					</c:otherwise>
+			      				</c:choose>
+			      				
+			      			</td>   
 			      		</tr>      		
 			      		<tr>
 			      			<td>&nbsp;</td>
-			      			<td><input id="textLogo" type="file" name="logoFile"></td>      			
+			      			<td><input id="textLogo" type="file" name="file"></td>      			
 			      		</tr>           		
 			      	</table>
 			      	<div id="btnArea">
