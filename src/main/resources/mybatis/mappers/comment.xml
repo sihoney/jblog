@@ -44,4 +44,11 @@
 			and post_no = #{postNo}
 		]]>
 	</select>
+	
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from comments
+			where cmt_no = #{cmtNo}
+		]]>
+	</delete>
 </mapper>

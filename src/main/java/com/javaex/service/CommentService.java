@@ -23,4 +23,11 @@ public class CommentService {
 		System.out.println("CommentService.getList()");
 		return cmtDao.getList(postNo);
 	}
+	
+	public int delete(int cmtNo) {
+		System.out.println(cmtNo);
+		
+		return cmtDao.delete(cmtNo);
+
+	}
 }

@@ -202,13 +202,18 @@
 		})
 	})
 	
-	function renderComment(vo) {
+	function renderComment(vo, authUserName) {
+
 		let str = ""
-		str += '<tr>';
+		str += '<tr id="tr-' + vo.cmtNo + '">';
 		str += '	<td>' + vo.userName + '</td>';
 		str += '	<td style="text-align: left">' + vo.cmtContent + '</td>';
 		str += '	<td>' + vo.regDate + '</td>';
-		str += '	<td><button data-cmtNo+"' + vo.cmtNo + '">❌</button></td>';
+		
+		if(authUserName == vo.userName) {
+			str += '	<td><button data-cmtNo="' + vo.cmtNo + '">❌</button></td>';
+		} 
+
 		str += '</tr>';
 		
 		$("#commentTable > tbody").prepend(str);
@@ -217,9 +222,28 @@
 	/* 코멘트 삭제버튼 클릭 */
 	$("#tbody-comment").on("click", "button", function(){
 		let $this = $(this)
-		let cmtNo  = $this.data("cmtNo")
-		
-		console.log(cmtNo)
+		let cmtNo  = $this.attr("data-cmtNo");
+
+		/* db 에서 삭제 */
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comment/delete",
+			type: "post", 
+			data: {cmtNo: cmtNo},
+			
+			dataType: "json",
+			success: function(result){
+				/* 화면에서 삭제 */
+				
+				if(result == 1) {
+					$("#tr-" + cmtNo).remove()
+				}
+				
+			},
+			error: function(XHR, status, error) {
+				console.log(status + " : " + error);
+				
+			}
+		})
 	})
 
 	/* 포스트 목록 클릭했을 때 */

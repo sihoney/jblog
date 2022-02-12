@@ -30,4 +30,11 @@ public class CommentDao {
 		
 		return sqlSession.selectList("commentbook.getList", postNo);
 	}
+	
+	public int delete(int cmtNo) {
+		int count = sqlSession.delete("commentbook.delete", cmtNo);
+		System.out.println(count + "건 코멘트가 삭제되었습니다.");
+		
+		return count;
+	}
 }

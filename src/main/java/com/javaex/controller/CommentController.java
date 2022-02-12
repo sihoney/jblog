@@ -41,8 +41,11 @@ public class CommentController {
 		return commentService.getList(postNo);
 	}
 	
+	@ResponseBody
 	@RequestMapping("/delete")
-	public void delete() {
+	public int delete(@RequestParam(value="cmtNo") int cmtNo) {
+		System.out.println("CommentController.delete()");
 		
+		return commentService.delete(cmtNo);
 	}
 }
