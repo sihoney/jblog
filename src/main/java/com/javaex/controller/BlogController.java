@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.javaex.service.BlogService;
@@ -24,10 +25,14 @@ public class BlogController {
 	BlogService blogService;
 	
 	@RequestMapping(value="/{userId}")
-	public String blog(@PathVariable("userId") String userId, Model model) {
+	public String blog(@PathVariable("userId") String userId
+					   , Model model,
+					   @RequestParam(value="crtPage", required=false, defaultValue="1") int crtPage) {
 		System.out.println("BlogController.blog()");
 
-		model.addAttribute("map", blogService.getBlogInfo(userId));
+		Map<String, Object> map = blogService.getBlogInfo(userId, crtPage);
+		
+		model.addAttribute("map", map);
 		
 		return "blog/blog-main";
 	}

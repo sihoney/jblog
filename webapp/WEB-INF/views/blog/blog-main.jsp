@@ -90,13 +90,14 @@
 							</colgroup>
 							<tr>
 								<td>${authUser.userName }</td>
-								<td><input type="text" name="cmtContent" value=""></td>
+								<td><input id="commentInput" type="text" name="cmtContent" value=""></td>
 								<td><button>저장</button></td>
 							</tr>
 						</table>
 					</form>
 				</c:if>
 				
+				<!-- 코멘트 리스트 -->
 				<table id="commentTable"  style="width: 100%; margin-top: 20px;">
 					<colgroup>
 						<col style="width: 10%;">
@@ -108,7 +109,7 @@
 					</tbody>
 				</table>
 				
-				
+				<!-- 포스트 목록 -->
 				<div id="list">
 					<div id="listTitle" class="text-left"><strong>카테고리의 글</strong></div>
 					<table id="cate-table">
@@ -128,6 +129,18 @@
 					</table>
 				</div>
 				<!-- //list -->
+				
+				<div id="paging">		
+					<ul>
+						<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.startBtnNo - 1}">◀</a></li>
+	
+						<c:forEach begin="${map.startBtnNo }" end="${map.endBtnNo }" step="1" var="page">
+							<li><a href="${pageContext.request.contextPath }/${map.blogVo.id}?crtPage=${page}">${page }</a></li>
+						</c:forEach>
+						 						 
+						<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.endBtnNo + 1}">▶</a></li>
+					</ul>
+				</div>
 			</div>
 			<!-- //post_area -->
 			
@@ -138,8 +151,9 @@
 		<div class=></div>
 		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"></c:import>
 		
+		<!-- delete 할 때 필요한 authUser 정보 -->
+		<input id="authUserName" type="hidden" name="authUserName" value="${authUser.userName }">
 		
-	
 	</div>
 	<!-- //wrap -->
 </body>
@@ -147,8 +161,14 @@
 	/* 코멘트 리스트 */
 	$("document").ready(function(){
 		let postNo = $("#postNo").val();
+		let authUserName = $("#authUserName").val();
 		
-		/* db에서 코멘트 리스트 가져오기 */
+		printComments(postNo)
+		
+	})
+	
+	function printComments(postNo, authUserName){
+		/* db에서 코멘트 리스트 가져와서 화면에 출력하기 */
 		$.ajax({
 			url: "${pageContext.request.contextPath}/comment/getList",
 			type: "post",
@@ -158,17 +178,14 @@
 			success: function(commentList){
 
 				for(let commentVo of commentList) {
-					renderComment(commentVo)
+					renderComment(commentVo, authUserName)
 				}
 				
 			},error: function(XHR, status, error) {
 				console.log(status + " : " + error);
-				
 			}
-			
 		})
-		
-	})
+	}
 
 	/* 코멘트 쓰기 */
 	$("#commentForm").on("submit", function(e){
@@ -176,6 +193,7 @@
 		
 		let arr = $("#commentForm").serializeArray();
 		let postNo = $("#postNo").val();
+		let authUserName = $("#authUserName").val();
 		
 		let obj = {
 				postNo: postNo,
@@ -193,7 +211,9 @@
 			dataType: "json",
 			success: function(result){
 				
-				renderComment(result)
+				renderComment(result, authUserName)
+				
+				$("#commentInput").val("")
 			},
 			error: function(XHR, status, error) {
 				console.log(status + " : " + error);
@@ -252,6 +272,7 @@
 		
 		let $this = $(this);
 		let postNo = $this.attr("data-postNo");
+		let authUserName = $("#authUserName").val();
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/post/getVo",
@@ -264,7 +285,11 @@
 				$("#postDate").html("<string>" + postVo.regDate + "</strong>")
 				$("#post").text(postVo.postContent)
 
-				$("#postNo").val(postNo)
+				$("#postNo").val(postNo) /* 코멘트 기능에서 이용 */
+				
+				/* 코멘트 리스트 새로 불러오기 */
+				$("#tbody-comment").empty();
+				printComments(postNo)
 			},
 			error: function(XHR, status, error) {
 				console.log(status + " : " + error);

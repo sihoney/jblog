@@ -1,6 +1,8 @@
 package com.javaex.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,17 @@ public class PostDao {
 		System.out.println(count + "건 글이 저장되었습니다.");
 	}
 	
-	public List<PostVo> getPostList(String userId) {
-		System.out.println(userId);
-		List<PostVo> postList =  sqlSession.selectList("postbook.getPostList", userId);
+	public List<PostVo> getPostList(String userId, int startNum, int endNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("startNum", startNum);
+		map.put("endNum", endNum);
 
-		return postList;
+		return sqlSession.selectList("postbook.getPostList", map);
+
 	}
 	
-	public PostVo getRecentPost(String userId) {
+	public PostVo getRecentPost(String userId) {		
 		return sqlSession.selectOne("postbook.getRecentPost", userId);
 	}
 	
@@ -41,5 +46,9 @@ public class PostDao {
 	
 	public PostVo getPostVo(int postNo) {
 		return sqlSession.selectOne("postbook.getPostVo", postNo);
+	}
+	
+	public int totalCnt(String userId) {
+		return sqlSession.selectOne("postbook.totalCnt", userId);
 	}
 }

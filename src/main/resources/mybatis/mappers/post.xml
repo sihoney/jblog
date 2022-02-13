@@ -20,18 +20,32 @@
 		]]>
 	</insert>
 	
-	<select id="getPostList" parameterType="String" resultType="com.javaex.vo.PostVo">
+	<select id="getPostList" parameterType="map" resultType="com.javaex.vo.PostVo">
 		<![CDATA[
-			select post_no as postNo,
-			       cate_no as cateNo,
-			       post_title as postTitle,
-			       post_content as postContent,
-			       reg_date as regDate
-			from post
-			where cate_no in (select cate_no
-			                  from category
-			                  where id = #{userId})
-			order by reg_date desc
+			select rt.post_no postNo,
+			       rt.cate_no cateNo,
+			       rt.post_title postTitle,
+			       rt.post_content postContent,
+			       rt.reg_date regDate
+			from (select rownum rn,
+			             ot.post_no,
+			             ot.cate_no,
+			             ot.post_title,
+			             ot.post_content,
+			             ot.reg_date
+			      from (select post_no,
+			                   cate_no,
+			                   post_title,
+			                   post_content,
+			                   reg_date
+			            from post
+			            where cate_no in (select cate_no
+			                              from category
+			                              where id = #{userId})
+			            order by reg_date desc
+			           ) ot
+			    ) rt
+			where rt.rn between #{startNum} and #{endNum}
 		]]>
 	</select>
 	
@@ -70,6 +84,16 @@
 			       to_char(reg_date, 'YYYY/MM/DD') regDate
 			from post
 			where post_no = #{postNo}
+		]]>
+	</select>
+	
+	<select id="totalCnt" parameterType="String" resultType="int">
+		<![CDATA[
+			select count(post_no)
+			from post
+			where cate_no in (select cate_no
+			                  from category
+			                  where id = #{userId})
 		]]>
 	</select>
 </mapper>
