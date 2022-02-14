@@ -9,7 +9,16 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 </head>
-
+<style>
+	#paging-ul {
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+	}
+	#paging-ul li {
+		margin: 0 10px 0 10px;
+	}
+</style>
 <body>
 	<div id="wrap">
 
@@ -101,7 +110,8 @@
 				<table id="commentTable"  style="width: 100%; margin-top: 20px;">
 					<colgroup>
 						<col style="width: 10%;">
-						<col style="width: 80%;">
+						<col style="width: 65%;">
+						<col style="">
 						<col style="">
 					</colgroup>
 					<tbody id="tbody-comment">
@@ -131,14 +141,18 @@
 				<!-- //list -->
 				
 				<div id="paging">		
-					<ul>
-						<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.startBtnNo - 1}">◀</a></li>
+					<ul id="paging-ul">
+						<c:if test="${map.prev eq true}">
+							<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.startBtnNo - 1}">◀</a></li>
+						</c:if>
 	
 						<c:forEach begin="${map.startBtnNo }" end="${map.endBtnNo }" step="1" var="page">
 							<li><a href="${pageContext.request.contextPath }/${map.blogVo.id}?crtPage=${page}">${page }</a></li>
 						</c:forEach>
-						 						 
-						<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.endBtnNo + 1}">▶</a></li>
+						 	
+						<c:if test="${map.next eq true }">
+							<li><a href="${pageContext.request.contextPath }/${authUser.id}?crtPage=${map.endBtnNo + 1}">▶</a></li>
+						</c:if>					 
 					</ul>
 				</div>
 			</div>
@@ -163,7 +177,7 @@
 		let postNo = $("#postNo").val();
 		let authUserName = $("#authUserName").val();
 		
-		printComments(postNo)
+		printComments(postNo, authUserName)
 		
 	})
 	
@@ -230,10 +244,10 @@
 		str += '	<td style="text-align: left">' + vo.cmtContent + '</td>';
 		str += '	<td>' + vo.regDate + '</td>';
 		
-		if(authUserName == vo.userName) {
+		if(authUserName == vo.userName) { // 삭제버튼이 보여야 할 상황에서 안보임 
 			str += '	<td><button data-cmtNo="' + vo.cmtNo + '">❌</button></td>';
 		} 
-
+		
 		str += '</tr>';
 		
 		$("#commentTable > tbody").prepend(str);

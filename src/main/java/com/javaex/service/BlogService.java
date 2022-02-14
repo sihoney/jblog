@@ -36,24 +36,47 @@ public class BlogService {
 		///////////////////////
 		// 리스트 가져오기
 		///////////////////////
+		// 페이지 당 글 개수
 		int listCnt = 10;
-		int endNum = (crtPage - 1) * listCnt + 1;
-		int startNum = endNum + listCnt - 1;
+		
+		// 시작 글 번호
+		int startNum = (crtPage - 1) * listCnt + 1;
+		
+		// 마지막 글 번호
+		int endNum = startNum + listCnt - 1;
+		
+		List<PostVo> postList = postDao.getPostList(userId, startNum, endNum);	/* 포스트 항목 */
 		
 		///////////////////////
 		// 페이징
 		///////////////////////
 		int totalListCnt = postDao.totalCnt(userId);
+		
+		// 페이지 당 버튼 개수
 		int pageBtnCnt = 5;
+		
+		// 마지막 버튼 번호
 		int endBtnNo = (int) (Math.ceil(crtPage / (double)pageBtnCnt)) * pageBtnCnt;
+		
+		// 시작 버튼 번호
 		int startBtnNo = endBtnNo - (pageBtnCnt - 1);
 		
-		// ************** 앞 뒤 화살표 유무 *****************
+		// 다음 화살표 유무
+		boolean next = false;
+		if(endBtnNo * listCnt < totalListCnt) { // 마지막 페이지가 아닌 경우
+			next = true;
+		} else { 				// 마지막 페이지의 경우, 다음 화살표가 안보이면 마지막 버튼 값을 다시 계싼
+			endBtnNo = (int) Math.ceil(totalListCnt / (double) listCnt);
+		}
 		
+		// 이전 화살표 유무
+		boolean prev = false;
+		if(startBtnNo != 1) {
+			prev = true;
+		}
 		
 		List<CateVo> cateList = cateDao.getCate(userId);		/* 카테고리 항목 */
 		BlogVo blogVo =  blogDao.getBlog(userId);				/* 블로그 정보 */
-		List<PostVo> postList = postDao.getPostList(userId, startNum, endNum);	/* 포스트 항목 */
 		PostVo postVo = postDao.getRecentPost(userId);			/* 가장 최신 포스트 */
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -61,8 +84,11 @@ public class BlogService {
 		map.put("blogVo", blogVo);
 		map.put("postList", postList);
 		map.put("postVo", postVo);
+		
 		map.put("startBtnNo", startBtnNo);
 		map.put("endBtnNo", endBtnNo);
+		map.put("prev", prev);
+		map.put("next", next);
 
 		return map;
 	}
