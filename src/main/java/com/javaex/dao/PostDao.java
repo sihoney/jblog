@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.javaex.vo.PostVo;
+import com.javaex.vo.SearchVo;
 
 @Repository
 public class PostDao {
@@ -51,4 +52,15 @@ public class PostDao {
 	public int totalCnt(String userId) {
 		return sqlSession.selectOne("postbook.totalCnt", userId);
 	}
+	
+	public List<SearchVo> searchPostByTitle(String title) {
+		System.out.println("title: "+ title);
+		return sqlSession.selectList("postbook.searchPostByTitle", title);
+	}
+	
+	public List<SearchVo> searchPostByName(String name) {
+		System.out.println("name: " + name);
+		return sqlSession.selectList("postbook.searchPostByName", name);
+	}
+
 }

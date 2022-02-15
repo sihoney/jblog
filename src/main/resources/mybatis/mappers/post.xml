@@ -96,4 +96,34 @@
 			                  where id = #{userId})
 		]]>
 	</select>
+	
+	<select id="searchPostByTitle" parameterType="String" resultType="com.javaex.vo.SearchVo">
+		<![CDATA[
+			select logo_file logoFile
+			       , blog.id 
+			       , user_name userName
+			       , post_title postTitle
+			       , post.reg_date regDate
+			from users, blog, category, post
+			where users.id = blog.id
+			and blog.id = category.id
+			and category.cate_no = post.cate_no
+			and blog_title = #{title}
+		]]>	
+	</select>
+	
+	<select id="searchPostByName" parameterType="String" resultType="com.javaex.vo.SearchVo">
+		<![CDATA[
+		select logo_file as logoFile
+		       , blog.id as id
+		       , user_name as userName
+		       , post_title as postTitle
+		       , post.reg_date as regDate
+		from users, blog, category, post
+		where users.id = blog.id
+		and blog.id = category.id
+		and category.cate_no = post.cate_no
+		and users.id = #{name}
+		]]>	
+	</select>
 </mapper>

@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>JBlog</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog2.css"> 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<div id="center-content">
@@ -30,10 +30,7 @@
 			</fieldset>
 		</form>
 		
-		<div id="resultList">
-			
-			
-		</div>
+		<div border="1" id="resultList"></div>
 		
 		<!-- 메인 푸터  자리-->
 		<c:import url="/WEB-INF/views/includes/main-footer.jsp"></c:import>
@@ -41,4 +38,65 @@
 	</div>
 	<!-- //center-content -->
 </body>
+<script>
+	/* 검색 결과 리스트 */
+	$("#search-form").on("submit", function(e){
+		e.preventDefault();
+		
+		let arr = $("#search-form").serializeArray();
+		
+		let obj = {
+				keyword: arr[0].value,
+				kwdOpt: arr[1].value
+		}
+
+		$.ajax({
+			url: "${pageContext.request.contextPath}/post/search",
+			type: "post",
+			contentType: "application/json",
+			data: JSON.stringify(obj),
+			
+			dataType: "json",
+			success: function(result){
+				
+				$("#resultList").empty()
+				
+				for(let vo of result) {
+					renderList(vo)
+				}
+			},
+			error: function(XHR, status, error) {
+				console.log(status + " : " + error);
+			}
+		})	
+	})
+	
+	function renderList(vo) {
+
+		let str = '';
+		str += '<table border="1" style="width: 100%; margin-top: 20px;">'
+		str += '	<colgroup>'
+		str += '		<col style="width: 10%">'
+		str += '		<col style="width: 40%">'
+		str += '		<col style="width: 15%">'
+		str += '		<col style="">'
+		str += '	</colgroup>'
+		str += '	<tr>'
+		str += '		<td style="text-align:center;"><img style="width: 80px;" src="${pageContext.request.contextPath}/upload/'+ vo.logoFile +'"></td>'
+		str += '		<td style="text-align:center;font-weight: bold; font-size: 1.2rem;">'+ vo.postTitle +'</td>'
+		str += '		<td style="text-align:center;font-weight: bold; font-size: 1.2rem;">'+ vo.userName + '(' + vo.id + ')' +'</td>'
+		str += '		<td style="text-align:center;font-weight: bold; font-size: 1.2rem;">'+ vo.regDate +'</td>'
+		str += '	</tr>'
+		str += '</table>'
+		
+		$("#resultList").append(str);
+	}
+	
+	/* 해당 글 클릭 --> 페이지로 이동 */
+	
+	
+	/* 페이징 */
+	
+	
+</script>
 </html>
