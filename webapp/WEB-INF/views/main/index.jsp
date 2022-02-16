@@ -32,6 +32,18 @@
 		
 		<div border="1" id="resultList"></div>
 		
+		<!-- 페이징 기능 -->
+		<div id="paging">
+			<ul>
+				<li>◀</li>
+				<c:forEach begin="" end="" step="1" var="page">
+					<li>${page }</li>
+				</c:forEach>
+				
+				<li>▶</li>
+			</ul>
+		</div>
+		
 		<!-- 메인 푸터  자리-->
 		<c:import url="/WEB-INF/views/includes/main-footer.jsp"></c:import>
 	
@@ -74,7 +86,7 @@
 	function renderList(vo) {
 
 		let str = '';
-		str += '<table border="1" style="width: 100%; margin-top: 20px;">'
+		str += '<table data-id="' + vo.id + '" data-postNo="' + vo.postNo + '" border="1" style="width: 100%; margin-top: 20px;">'
 		str += '	<colgroup>'
 		str += '		<col style="width: 10%">'
 		str += '		<col style="width: 40%">'
@@ -93,7 +105,15 @@
 	}
 	
 	/* 해당 글 클릭 --> 페이지로 이동 */
-	
+	$("#resultList").on("click", "table", function(){
+		
+		let $this = $(this);
+		let id = $this.data("id")
+		let postNo = $this.data("postno")
+
+		location.href='${pageContext.request.contextPath}/' + id + '?postNo=' + postNo;
+
+	})
 	
 	/* 페이징 */
 	

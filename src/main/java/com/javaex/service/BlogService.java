@@ -31,7 +31,7 @@ public class BlogService {
 	PostDao postDao;
 	
 	/* 블로그 첫 화면 정보들 */
-	public Map<String, Object> getBlogInfo(String userId, int crtPage) {
+	public Map<String, Object> getBlogInfo(String userId, int crtPage, int postNo) {
 		
 		///////////////////////
 		// 리스트 가져오기
@@ -77,7 +77,14 @@ public class BlogService {
 		
 		List<CateVo> cateList = cateDao.getCate(userId);		/* 카테고리 항목 */
 		BlogVo blogVo =  blogDao.getBlog(userId);				/* 블로그 정보 */
-		PostVo postVo = postDao.getRecentPost(userId);			/* 가장 최신 포스트 */
+		
+		PostVo postVo;
+		if(postNo == 0) {
+			postVo = postDao.getRecentPost(userId);			/* 가장 최신 포스트 */
+		} else {
+			postVo = postDao.getPostVo(postNo);
+		}
+		
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cateList", cateList);

@@ -27,10 +27,13 @@ public class BlogController {
 	@RequestMapping(value="/{userId}")
 	public String blog(@PathVariable("userId") String userId
 					   , Model model,
-					   @RequestParam(value="crtPage", required=false, defaultValue="1") int crtPage) {
+					   @RequestParam(value="crtPage", required=false, defaultValue="1") int crtPage,
+					   @RequestParam(value="postNo", required=false, defaultValue="0") int postNo) {
 		System.out.println("BlogController.blog()");
 
-		Map<String, Object> map = blogService.getBlogInfo(userId, crtPage);
+		System.out.println("postNo: " + postNo);
+		
+		Map<String, Object> map = blogService.getBlogInfo(userId, crtPage, postNo);
 		
 		model.addAttribute("map", map);
 		

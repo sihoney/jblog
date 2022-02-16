@@ -7,16 +7,18 @@ public class SearchVo {
 	private String userName;
 	private String postTitle;
 	private String regDate;
+	private int postNo;
 	
 	public SearchVo() {}
 	
-	public SearchVo(String logoFile, String id, String userName, String postTitle, String regDate) {
+	public SearchVo(String logoFile, String id, String userName, String postTitle, String regDate, int postNo) {
 		super();
 		this.logoFile = logoFile;
 		this.id = id;
 		this.userName = userName;
 		this.postTitle = postTitle;
 		this.regDate = regDate;
+		this.postNo= postNo;	
 	}
 
 	public String getLogoFile() {
@@ -58,10 +60,17 @@ public class SearchVo {
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+	public int getPostNo() {
+		return postNo;
+	}
+	public void setPostNo(int postNo) {
+		this.postNo = postNo;
+	}
 
 	@Override
 	public String toString() {
 		return "SearchVo [logoFile=" + logoFile + ", id=" + id + ", userName=" + userName + ", postTitle=" + postTitle
-				+ ", regDate=" + regDate + "]";
+				+ ", regDate=" + regDate + ", postNo=" + postNo + "]";
 	}
+
 }

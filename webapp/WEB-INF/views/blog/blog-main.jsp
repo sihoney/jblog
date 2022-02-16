@@ -140,6 +140,7 @@
 				</div>
 				<!-- //list -->
 				
+				<!-- 페이징 기능 -->
 				<div id="paging">		
 					<ul id="paging-ul">
 						<c:if test="${map.prev eq true}">
