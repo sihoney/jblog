@@ -53,14 +53,33 @@ public class PostDao {
 		return sqlSession.selectOne("postbook.totalCnt", userId);
 	}
 	
-	public List<SearchVo> searchPostByTitle(String title) {
-		System.out.println("title: "+ title);
-		return sqlSession.selectList("postbook.searchPostByTitle", title);
+	public List<SearchVo> searchPostByTitle(String title, int startListNo, int endListNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", title);
+		map.put("startListNo", startListNo);
+		map.put("endListNo", endListNo);
+		
+		System.out.println("map: "+ map);
+		
+		return sqlSession.selectList("postbook.searchPostByTitle", map);
 	}
 	
-	public List<SearchVo> searchPostByName(String name) {
+	public List<SearchVo> searchPostByName(String name, int startListNo, int endListNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", name);
+		map.put("startListNo", startListNo);
+		map.put("endListNo", endListNo);
+		
 		System.out.println("name: " + name);
-		return sqlSession.selectList("postbook.searchPostByName", name);
+		
+		return sqlSession.selectList("postbook.searchPostByName", map);
+	}
+	
+	public int getTotalCntByTitle(String title) {
+		return sqlSession.selectOne("postbook.getTotalCntByTitle", title);
 	}
 
+	public int getTotalCntByName(String name) {
+		return sqlSession.selectOne("postbook.getTotalCntByName", name);
+	}
 }

@@ -39,9 +39,10 @@ public class PostController {
 	
 	@ResponseBody
 	@RequestMapping("/search")
-	public List<SearchVo> search(@RequestBody Map<String, String> map) {
+	public Map<String, Object> search(@RequestBody Map<String, String> map,
+								      @RequestParam(value="crtPage", required=false, defaultValue="1") int crtPage) {
 		System.out.println("PostController.search()");
 		
-		return postService.searchPost(map);
+		return postService.searchPost(map, crtPage);
 	}
 }

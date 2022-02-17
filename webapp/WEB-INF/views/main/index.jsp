@@ -55,6 +55,8 @@
 	$("#search-form").on("submit", function(e){
 		e.preventDefault();
 		
+		console.log("submit")
+		
 		let arr = $("#search-form").serializeArray();
 		
 		let obj = {
@@ -63,19 +65,21 @@
 		}
 
 		$.ajax({
-			url: "${pageContext.request.contextPath}/post/search",
+			url: "${pageContext.request.contextPath}/post/search,
 			type: "post",
 			contentType: "application/json",
 			data: JSON.stringify(obj),
 			
 			dataType: "json",
 			success: function(result){
-				
+				/*
 				$("#resultList").empty()
 				
 				for(let vo of result) {
 					renderList(vo)
 				}
+				*/
+				console.log(result)
 			},
 			error: function(XHR, status, error) {
 				console.log(status + " : " + error);
@@ -114,8 +118,6 @@
 		location.href='${pageContext.request.contextPath}/' + id + '?postNo=' + postNo;
 
 	})
-	
-	/* 페이징 */
 	
 	
 </script>
