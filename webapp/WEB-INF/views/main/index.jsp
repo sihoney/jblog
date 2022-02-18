@@ -34,14 +34,7 @@
 		
 		<!-- 페이징 기능 -->
 		<div id="paging">
-			<ul>
-				<li>◀</li>
-				<c:forEach begin="" end="" step="1" var="page">
-					<li>${page }</li>
-				</c:forEach>
-				
-				<li>▶</li>
-			</ul>
+			<ul style="display: flex; justify-content: center;"></ul>
 		</div>
 		
 		<!-- 메인 푸터  자리-->
@@ -54,9 +47,7 @@
 	/* 검색 결과 리스트 */
 	$("#search-form").on("submit", function(e){
 		e.preventDefault();
-		
-		console.log("submit")
-		
+
 		let arr = $("#search-form").serializeArray();
 		
 		let obj = {
@@ -65,27 +56,39 @@
 		}
 
 		$.ajax({
-			url: "${pageContext.request.contextPath}/post/search,
+			url: "${pageContext.request.contextPath}/post/search",
 			type: "post",
 			contentType: "application/json",
 			data: JSON.stringify(obj),
 			
 			dataType: "json",
-			success: function(result){
-				/*
+			success: function(map){
+				
 				$("#resultList").empty()
 				
-				for(let vo of result) {
+				for(let vo of map.searchList) {
 					renderList(vo)
 				}
-				*/
-				console.log(result)
+				
+				/* 페이징 작업 */
+				renderPaging(map.startBtnNo, map.endBtnNo)
 			},
 			error: function(XHR, status, error) {
 				console.log(status + " : " + error);
 			}
-		})	
+		})
+
 	})
+	
+	function renderPaging(startBtnNo, endBtnNo) {
+		let str = '';
+		
+		for(let i = startBtnNo; i <= endBtnNo; i++) {
+			str += '<li><a href="${pageContext.request.contextPath}/post/search?crtPage=' + i + '">'+ i +'</a></li>'
+		}
+		
+		$("#paging > ul").append(str)
+	}
 	
 	function renderList(vo) {
 
